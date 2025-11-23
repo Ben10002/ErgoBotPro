@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Einstellungen: {{ user.first_name }}</title>
+    <style>
+        body { font-family: -apple-system, sans-serif; background-color: #f1f2f6; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 350px; }
+        h2 { margin-top: 0; color: #333; }
+        .form-group { margin-bottom: 1.5rem; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: #666; font-size: 0.9rem; }
+        input[type="number"] { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; box-sizing: border-box; }
+        .desc { font-size: 0.8rem; color: #999; margin-top: 5px; line-height: 1.4; }
+        .btn { display: block; width: 100%; padding: 12px; background: #2481cc; color: white; text-align: center; text-decoration: none; border-radius: 8px; border: none; font-size: 1rem; cursor: pointer; font-weight: bold; margin-top: 10px; }
+        .btn-back { background: #ddd; color: #333; margin-top: 10px; }
+        .btn:hover { opacity: 0.9; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>🌙 Nachtruhe</h2>
+        <p class="desc">Lege fest, wann Benni schlafen soll. In dieser Zeit antwortet er nicht automatisch.</p>
+        
+        <form action="/save_settings/{{ user.id }}" method="POST">
+            <div class="form-group">
+                <label>Schlafen von (Uhrzeit)</label>
+                <input type="number" name="start_hour" min="0" max="23" value="{{ user.quiet_start }}" required>
+                <div class="desc">z.B. 23 für 23:00 Uhr</div>
+            </div>
+
+            <div class="form-group">
+                <label>Schlafen bis (Uhrzeit)</label>
+                <input type="number" name="end_hour" min="0" max="23" value="{{ user.quiet_end }}" required>
+                <div class="desc">z.B. 7 für 07:00 Uhr</div>
+            </div>
+
+            <button type="submit" class="btn">Speichern</button>
+            <a href="/chat/{{ user.id }}" class="btn btn-back">Zurück zum Chat</a>
+        </form>
+    </div>
+</body>
+</html>

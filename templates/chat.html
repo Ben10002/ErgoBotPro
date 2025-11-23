@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Akte: {{ user.first_name }}</title>
+    <style>
+        /* ... BASIS STYLES ... */
+        :root { --bg-color: #e5ddd5; --header-bg: #ffffff; --sidebar-bg: #ffffff; --info-bg: #f7f9fa; --active-chat: #3390ec; --hover-chat: #f5f5f5; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+        header { background-color: var(--header-bg); padding: 0 1.5rem; display: flex; align-items: center; gap: 1rem; border-bottom: 1px solid #ddd; z-index: 10; height: 60px; flex-shrink: 0; }
+        .settings-btn { text-decoration: none; font-size: 1.2rem; color: #555; padding: 5px; margin-left: 10px; transition: transform 0.2s; }
+        .settings-btn:hover { transform: rotate(45deg); color: #333; }
+        
+        .main-wrapper { display: flex; flex: 1; height: calc(100vh - 60px); }
+        .chat-list-sidebar { width: 320px; background-color: var(--sidebar-bg); border-right: 1px solid #ddd; display: flex; flex-direction: column; overflow-y: auto; flex-shrink: 0; }
+        .chat-item { display: flex; align-items: center; padding: 10px 15px; cursor: pointer; border-bottom: 1px solid #f0f0f0; text-decoration: none; color: inherit; transition: background 0.2s; }
+        .chat-item:hover { background-color: var(--hover-chat); }
+        .chat-item.active { background-color: #3390ec; color: white; }
+        .chat-item.active .last-msg { color: rgba(255,255,255,0.8); }
+        .chat-item.active .avatar { border: 2px solid white; }
+        .avatar { width: 45px; height: 45px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1.1rem; margin-right: 12px; flex-shrink: 0; }
+        .chat-info { flex-grow: 1; overflow: hidden; }
+        .chat-name { font-weight: 600; font-size: 1rem; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .last-msg { font-size: 0.8rem; color: #888; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        
+        .chat-section { flex: 1; display: flex; flex-direction: column; position: relative; background-color: var(--bg-color); background-image: linear-gradient(rgba(229, 221, 213, 0.9), rgba(229, 221, 213, 0.9)), url('https://web.telegram.org/img/bg_0.png'); }
+        .chat-container { flex: 1; padding: 1rem; padding-bottom: 80px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; max-width: 900px; width: 100%; margin: 0 auto; }
+        
+        .controls-group { display: flex; gap: 20px; align-items: center; margin-left: auto; }
+        .toggle-container { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; font-weight: 600; color: #555; }
+        .switch-label { font-size: 0.75rem; text-transform: uppercase; color: #999; letter-spacing: 0.5px; }
+        .switch { position: relative; display: inline-block; width: 40px; height: 22px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider.green { background-color: #2ecc71; } 
+        input:checked + .slider.blue { background-color: #3498db; } 
+        input:checked + .slider:before { transform: translateX(18px); }
+        
+        .input-area { position: absolute; bottom: 0; left: 0; right: 0; background: #f0f2f5; padding: 10px; display: flex; justify-content: center; border-top: 1px solid #ddd; }
+        input[type="text"] { flex-grow: 1; padding: 12px; border-radius: 20px; border: 1px solid #ccc; outline: none; }
+        button { background-color: #0088cc; color: white; border: none; padding: 0 20px; border-radius: 20px; cursor: pointer; font-weight: bold; margin-left: 10px; display: flex; align-items: center; justify-content: center; }
+        .magic-btn { background-color: #8e44ad; } .magic-btn:hover { background-color: #732d91; }
+        
+        /* --- KORRIGIERTE SPRECHBLASEN --- */
+        /* Der User (Gegenüber) ist jetzt LINKS (Weiß) */
+        .msg-user { 
+            align-self: flex-start; 
+            background-color: #fff; 
+            border-top-left-radius: 0; 
+            border-top-right-radius: 8px; 
+        }
+        
+        /* Der Bot/Admin (Du) ist jetzt RECHTS (Grün) */
+        .msg-assistant { 
+            align-self: flex-end; 
+            background-color: #dcf8c6; 
+            border-top-right-radius: 0; 
+            border-top-left-radius: 8px;
+        }
+        /* -------------------------------- */
+
+        .msg { max-width: 75%; padding: 8px 12px; border-radius: 8px; position: relative; box-shadow: 0 1px 1px rgba(0,0,0,0.1); font-size: 0.95rem; line-height: 1.4; word-wrap: break-word; }
+        .meta { font-size: 0.65rem; color: #999; text-align: right; }
+
+        /* SIDEBAR */
+        .info-sidebar { width: 300px; background-color: var(--info-bg); border-left: 1px solid #ddd; padding: 1.5rem; overflow-y: auto; flex-shrink: 0; }
+        h3 { margin-top: 0; color: #444; border-bottom: 2px solid #ddd; padding-bottom: 10px; font-size: 1rem; }
+        .section-title { font-size: 0.8rem; font-weight: bold; color: #888; text-transform: uppercase; margin-bottom: 10px; letter-spacing: 1px; }
+        .fact-card { background: white; padding: 10px; margin-bottom: 8px; border-radius: 8px; border: 1px solid #eee; }
+        .meta-card { background: #fff8e1; border-color: #ffe082; } 
+        .fact-key { font-size: 0.7rem; color: #888; text-transform: uppercase; font-weight: bold; }
+        .fact-value { font-size: 0.95rem; color: #333; margin-top: 2px; }
+        .empty-state { color: #999; font-style: italic; text-align: center; margin-top: 10px; font-size: 0.9rem; }
+        .toggle-meta-btn { background: none; border: 1px dashed #aaa; color: #666; width: 100%; padding: 8px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; margin-top: 10px; transition: 0.2s; }
+        .toggle-meta-btn:hover { background: #eee; border-color: #888; }
+        #meta-section { display: none; margin-top: 20px; border-top: 1px solid #ddd; padding-top: 15px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div style="font-weight: bold; font-size: 1.2rem; color: #3390ec;">TelegramGPT</div>
+        <div style="margin-left: 20px; font-weight: bold;">{{ user.first_name }}</div>
+        <a href="/settings/{{ user.id }}" class="settings-btn" title="Einstellungen">⚙️</a>
+        <div class="controls-group">
+            <div class="toggle-container">
+                <span class="switch-label">KI Aktiv</span>
+                <label class="switch"><input type="checkbox" id="ai-toggle" onchange="toggleAI({{ user.id }})" {{ 'checked' if user.is_active }}><span class="slider green"></span></label>
+            </div>
+            <div class="toggle-container">
+                <span class="switch-label">⏳ Mensch</span>
+                <label class="switch"><input type="checkbox" id="human-toggle" onchange="toggleHuman({{ user.id }})" {{ 'checked' if user.human_mode }}><span class="slider blue"></span></label>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-wrapper">
+        <div class="chat-list-sidebar">
+            <div style="padding: 15px; font-weight: bold; color: #666; border-bottom: 1px solid #eee;">Meine Chats</div>
+            {% for u in users %}
+            <a href="/chat/{{ u.id }}" class="chat-item {{ 'active' if u.id == user.id else '' }}">
+                <div class="avatar">{{ u.first_name[0] }}</div>
+                <div class="chat-info"><div class="chat-name">{{ u.first_name }}</div><div class="last-msg">@{{ u.username }}</div></div>
+            </a>
+            {% endfor %}
+        </div>
+
+        <div class="chat-section">
+            <div class="chat-container" id="chat-box">
+                {% for msg in messages %}
+                <div class="msg msg-{{ msg.role }}">{{ msg.content }}<div class="meta">{{ msg.timestamp.split('.')[0] }}</div></div>
+                {% endfor %}
+            </div>
+            <div class="input-area">
+                <form id="send-form" style="display:flex; width:100%; max-width: 900px;">
+                    <button type="button" class="magic-btn" onclick="triggerAI({{ user.id }})" title="Erfinde Nachricht">✨</button>
+                    <input type="text" id="msg-input" placeholder="Nachricht an {{ user.first_name }}..." required autocomplete="off" style="margin-left: 10px;">
+                    <button type="submit">➤</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="info-sidebar">
+            <h3>📂 User Akte</h3>
+            <div id="facts-list"><div class="empty-state">Lade Daten...</div></div>
+            <button class="toggle-meta-btn" onclick="toggleMeta()">👁️ Erweiterte Akte anzeigen</button>
+            <div id="meta-section">
+                <div class="section-title">Psychologisches Profil</div>
+                <div id="meta-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const userId = {{ user.id }};
+        const chatBox = document.getElementById('chat-box');
+        let isUserScrolling = false;
+        chatBox.addEventListener('scroll', () => { if (chatBox.scrollTop + chatBox.clientHeight < chatBox.scrollHeight - 50) isUserScrolling = true; else isUserScrolling = false; });
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        function toggleMeta() {
+            const sec = document.getElementById('meta-section');
+            const btn = document.querySelector('.toggle-meta-btn');
+            if (sec.style.display === 'block') { sec.style.display = 'none'; btn.innerText = "👁️ Erweiterte Akte anzeigen"; } 
+            else { sec.style.display = 'block'; btn.innerText = "🙈 Erweiterte Akte verbergen"; }
+        }
+
+        function fetchUpdates() {
+            fetch('/api/chat_data/' + userId).then(r => r.json()).then(data => {
+                updateChatUI(data.messages);
+                updateFactsUI(data.facts); 
+                updateToggles(data.is_active, data.is_human);
+            }).catch(e => console.error(e));
+        }
+        setInterval(fetchUpdates, 2000);
+
+        function updateChatUI(messages) {
+            let html = '';
+            messages.forEach(msg => { html += `<div class="msg msg-${msg.role}">${msg.content}<div class="meta">${msg.timestamp}</div></div>`; });
+            if (chatBox.innerHTML.length !== html.length + 100) { 
+                 const oldHTML = chatBox.innerHTML;
+                 if (oldHTML.trim() !== html.trim()) {
+                     chatBox.innerHTML = html;
+                     if (!isUserScrolling) chatBox.scrollTop = chatBox.scrollHeight;
+                 }
+            }
+        }
+
+        function updateFactsUI(data) {
+            const factsBox = document.getElementById('facts-list');
+            const metaBox = document.getElementById('meta-list');
+            function generateHTML(obj, isMeta) {
+                if (!obj || Object.keys(obj).length === 0) return '<div class="empty-state">Keine Daten...</div>';
+                let html = '';
+                for (const [key, value] of Object.entries(obj)) {
+                    html += `<div class="fact-card ${isMeta ? 'meta-card' : ''}"><div class="fact-key">${key}</div><div class="fact-value">${value}</div></div>`;
+                }
+                return html;
+            }
+            const factsHTML = generateHTML(data.facts, false);
+            if (factsBox.innerHTML.trim() !== factsHTML.trim()) factsBox.innerHTML = factsHTML;
+            const metaHTML = generateHTML(data.meta, true);
+            if (metaBox.innerHTML.trim() !== metaHTML.trim()) metaBox.innerHTML = metaHTML;
+        }
+        
+        function updateToggles(isActive, isHuman) {
+            document.getElementById('ai-toggle').checked = isActive;
+            document.getElementById('human-toggle').checked = isHuman;
+        }
+
+        document.getElementById('send-form').addEventListener('submit', function(e) {
+            e.preventDefault(); 
+            const input = document.getElementById('msg-input'); const text = input.value;
+            if (!text) return; input.value = '';
+            fetch('/send_message/' + userId, { method: 'POST', headers: {'Content-Type': 'application/x-www-form-urlencoded'}, body: 'message=' + encodeURIComponent(text) }).then(r => r.json()).then(d => fetchUpdates());
+        });
+
+        function toggleAI(uId) { fetch('/toggle/' + uId, { method: 'POST' }).then(r => r.json()).then(d => fetchUpdates()); }
+        function toggleHuman(uId) { fetch('/toggle_human/' + uId, { method: 'POST' }).then(r => r.json()).then(d => fetchUpdates()); }
+        function triggerAI(uId) {
+            const btn = document.querySelector('.magic-btn'); const originalText = btn.innerText; btn.innerText = "⏳";
+            fetch('/trigger_ai/' + uId, { method: 'POST' }).then(r => r.json()).then(d => { btn.innerText = originalText; fetchUpdates(); });
+        }
+        
+        fetchUpdates();
+    </script>
+</body>
+</html>
