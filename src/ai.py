@@ -112,7 +112,7 @@ async def extract_facts_from_text(user_text, conversation_context=None):
         )
         
         response = await client.chat.completions.create(
-            model="gpt-4o",
+            model="gpt-4o-mini",
             messages=[{"role": "user", "content": prompt}],
             temperature=0.3,
             response_format={"type": "json_object"}
@@ -284,7 +284,7 @@ async def generate_sales_move(user_text, current_facts, chat_history):
         )
         
         response = await client.chat.completions.create(
-            model="gpt-4o",
+            model="gpt-4o-mini",
             messages=[{"role": "user", "content": prompt}],
             max_tokens=400,
             temperature=0.7
@@ -404,7 +404,7 @@ async def get_chatgpt_response(history_messages, user_meta=None, strategic_instr
         full_conversation = [{"role": "system", "content": system_prompt}] + history_messages
         
         response = await client.chat.completions.create(
-            model="gpt-4o",
+            model="gpt-4o-mini",
             messages=full_conversation,
             max_tokens=120,
             temperature=0.95,
