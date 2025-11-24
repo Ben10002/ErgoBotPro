@@ -124,18 +124,30 @@ def get_user_stats_api(user_id):
     try:
         stats = get_user_stats(user_id)
         facts = get_user_facts(user_id)
-        lead_score = calculate_lead_score(facts)
+        
+        # Lead Score berechnen (kann None sein wenn keine Daten)
+        try:
+            lead_score = calculate_lead_score(facts)
+        except:
+            lead_score = 0
         
         return jsonify({
-            "messages": stats['messages'],
-            "facts": stats['facts'],
-            "contacts": stats['contacts'],
+            "messages": stats.get('messages', 0),
+            "facts": stats.get('facts', 0),
+            "contacts": stats.get('contacts', 0),
             "lead_score": lead_score
         })
     
     except Exception as e:
         print(f"❌ Fehler bei get_user_stats_api: {e}")
-        return jsonify({"error": str(e)}), 500
+        import traceback
+        traceback.print_exc()
+        return jsonify({
+            "messages": 0,
+            "facts": 0,
+            "contacts": 0,
+            "lead_score": 0
+        }), 200  # ← Wichtig: 200 statt 500!
 
 @app.route('/api/user_details/<int:user_id>')
 def get_user_details(user_id):
@@ -248,6 +260,16 @@ def internal_error(error):
     return jsonify({"error": "Interner Serverfehler"}), 500
 
 # ==================== MAIN ====================
+# Bessere Error Handler
+@app.errorhandler(Exception)
+def handle_exception(e):
+    import traceback
+    print(f"❌ Unhandled Exception: {e}")
+    traceback.print_exc()
+    return jsonify({
+        "error": "Ein Fehler ist aufgetreten",
+        "message": str(e)
+    }), 500
 
 if __name__ == '__main__':
     print("\n" + "="*50)
