@@ -1,7 +1,35 @@
-.env 
-data/  venv/  __pycache__/  *.pyc  *.db 
-data/ 
-venv/ 
-__pycache__/ 
-*.pyc 
-*.db 
+cd "C:\Users\leerz\Desktop\Coding\Ergo System\Ergo Telegram"
+
+# .gitignore komplett neu schreiben
+notepad .gitignore
+```
+
+Lösche alles und füge das ein:
+```
+# Environment
+.env
+.venv
+
+# Database
+data/
+
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.db
+*.sqlite
+*.sqlite3
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
