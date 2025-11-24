@@ -126,7 +126,9 @@ def get_all_users():
         ORDER BY last_message_at DESC
     """).fetchall()
     conn.close()
-    return users
+    
+    # Convert Row objects to dicts
+    return [dict(user) for user in users]
 
 def toggle_user_active(user_id):
     """Schaltet den aktiven Status eines Users um"""
