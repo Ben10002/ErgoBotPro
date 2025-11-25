@@ -35,16 +35,48 @@ async def extract_facts_from_text(user_text, conversation_context=None):
             "=== ANALYSIERE AUF MEHREREN EBENEN ===\n\n"
             
             "1. HARTE FAKTEN (facts)\n"
-            "   NUR extrem konkrete Informationen:\n"
-            "   - Alter (nur wenn explizit genannt!)\n"
-            "   - Name (Vorname, falls genannt)\n"
-            "   - Beruf (konkrete Berufsbezeichnung)\n"
-            "   - Wohnort (Stadt/Region)\n"
-            "   - Familie: Eltern, Geschwister, Partner, Kinder\n"
-            "   - Einkommen/Finanzlage (nur wenn klar ersichtlich)\n"
-            "   - WICHTIG: Nur FAKTEN, keine Interpretationen!\n"
-            "     Beispiel GUT: 'alter': '25'\n"
-            "     Beispiel SCHLECHT: 'alter': 'jung, wahrscheinlich Mitte 20'\n\n"
+            "   Speichere ALLES was du über die Person erfährst:\n\n"
+            
+            "   DEMOGRAFISCHES:\n"
+            "   - Alter: IMMER extrahieren wenn genannt! '21', '25 Jahre', 'bin 28' → speichere die Zahl\n"
+            "   - Name: Jeder Name der fällt\n"
+            "   - Beruf: Konkrete Berufe UND Ausbildung/Studium\n"
+            "   - Wohnort: Stadt, Stadtteil, Region\n\n"
+            
+            "   INTERESSEN & HOBBIES:\n"
+            "   - Sport: 'Champions League schauen' → fussball_fan: ja, team: [falls genannt]\n"
+            "   - Gaming: Welche Spiele? Konsole/PC?\n"
+            "   - Musik: Genres, Künstler, Konzerte\n"
+            "   - Serien/Filme: Was schaut er?\n"
+            "   - Andere: Kochen, Reisen, Fitness, etc.\n\n"
+            
+            "   SOZIALES UMFELD:\n"
+            "   - Familie: Eltern, Geschwister (Namen + Details)\n"
+            "   - Partner: Beziehungsstatus, Name\n"
+            "   - Freunde: Namen wenn erwähnt\n"
+            "   - Haustiere: Welche, Namen\n\n"
+            
+            "   FINANZIELLES:\n"
+            "   - Einkommen: Direkt oder indirekt (teure Käufe, Urlaube)\n"
+            "   - Wohnsituation: Eigentum, Miete, WG, bei Eltern\n"
+            "   - Ausgaben: Was kauft er? (Auto, Tech, Kleidung)\n\n"
+            
+            "   BILDUNG & KARRIERE:\n"
+            "   - Ausbildung: Schule, Uni, Abschluss\n"
+            "   - Job: Aktuell, früher, Pläne\n"
+            "   - Arbeitgeber: Firma wenn genannt\n\n"
+            
+            "   WICHTIG - LIES ZWISCHEN DEN ZEILEN:\n"
+            "   - 'Schaue Champions League' → fussball_interesse: ja\n"
+            "   - 'Bin Leverkusen Fan' → lieblings_verein: Leverkusen\n"
+            "   - 'Spiele Minecraft' → gaming_interesse: ja, spiel: Minecraft\n"
+            "   - 'Muss morgen früh raus' → hat_job: ja (vermutlich)\n"
+            "   - 'Wohne noch bei Eltern' → wohnsituation: bei_eltern\n\n"
+            
+            "   FORMAT:\n"
+            "   - Kurz und präzise: 'alter': '21', nicht '21 Jahre alt'\n"
+            "   - Bei Unsicherheit trotzdem speichern: 'job': 'vermutlich Bürojob'\n"
+            "   - Mehrere Werte: 'hobbies': 'Fußball, Gaming, Netflix'\n\n"
             
             "2. PSYCHOLOGISCHES PROFIL (meta)\n"
             "   Hier kannst du interpretieren:\n"
@@ -69,29 +101,57 @@ async def extract_facts_from_text(user_text, conversation_context=None):
             
             "=== WICHTIG ===\n"
             "- VOLLE INTERPRETATIONSFREIHEIT\n"
+            "- AGGRESSIV Daten sammeln: Lieber zu viel als zu wenig!\n"
             "- Lies zwischen den Zeilen\n"
-            "- Auch vage Hinweise sind wertvoll\n"
+            "- IMMER Alter extrahieren wenn genannt (egal wie formuliert)\n"
+            "- Hobbies/Interessen aus ALLEM ableiten\n"
+            "- Auch Spekulationen speichern (mit 'vermutlich' markieren)\n"
             "- KONTEXT BEACHTEN: Gesamtbild betrachten\n"
-            "- Bei banalen Nachrichten ('jo', 'ok'): Leere Objekte zurückgeben\n\n"
+            "- Bei banalen Nachrichten ('jo', 'ok'): Leere Objekte zurückgeben\n"
+            "- Wenn User konkrete Infos gibt: IMMER in facts speichern!\n\n"
             
             "=== OUTPUT FORMAT (JSON) ===\n"
             "{\n"
             '  "facts": {\n'
-            '    "alter": "28",\n'
-            '    "beruf": "Software Engineer"\n'
+            '    "alter": "21",\n'
+            '    "beruf": "Student",\n'
+            '    "fussball_interesse": "ja",\n'
+            '    "lieblings_verein": "Leverkusen",\n'
+            '    "hobbies": "Fußball, Gaming",\n'
+            '    "wohnsituation": "bei_eltern"\n'
             "  },\n"
             '  "meta": {\n'
-            '    "persoenlichkeit": "Extrovertiert, selbstbewusst",\n'
-            '    "kommunikationsstil": "Kurz und direkt",\n'
-            '    "emotionaler_zustand": "Entspannt"\n'
+            '    "persoenlichkeit": "Entspannt, sportbegeistert",\n'
+            '    "kommunikationsstil": "Kurz, locker",\n'
+            '    "emotionaler_zustand": "Gut gelaunt"\n'
             "  },\n"
             '  "lead_signals": [\n'
-            '    "Erwähnte teuren Urlaub - Kaufkraft vorhanden"\n'
+            '    "Jung, vermutlich kein Einkommen - niedriges Potenzial aktuell"\n'
             "  ],\n"
             '  "contacts": [],\n'
-            '  "confidence_level": "hoch",\n'
-            '  "analysis_note": "User wirkt finanziell stabil"\n'
-            "}\n"
+            '  "confidence_level": "mittel",\n'
+            '  "analysis_note": "Junger User, noch in Ausbildung"\n'
+            "}\n\n"
+            
+            "BEISPIEL - IMPLIZITE INFOS ERKENNEN:\n"
+            "User sagt: 'Schaue grad Champions League'\n"
+            "Du extrahierst:\n"
+            "- fussball_interesse: ja\n"
+            "- aktuell_beschaeftigt: Champions League schauen\n\n"
+            
+            "User sagt: 'Bin 21 und studiere noch'\n"
+            "Du extrahierst:\n"
+            "- alter: 21\n"
+            "- beruf: Student\n"
+            "- einkommen: vermutlich niedrig/keins\n\n"
+            
+            "User sagt: 'Bin Leverkusen Fan'\n"
+            "Du extrahierst:\n"
+            "- lieblings_verein: Leverkusen\n"
+            "- fussball_interesse: ja\n"
+            "- wohnort_region: vermutlich NRW (spekulativ)\n\n"
+            
+            "SEI AGGRESSIV beim Sammeln! Lieber zu viel als zu wenig!\n"
         )
         
         response = await client.chat.completions.create(
