@@ -112,6 +112,25 @@
             color: var(--primary);
         }
 
+        .back-btn {
+            text-decoration: none;
+            padding: 8px 16px;
+            background: var(--info-bg);
+            border-radius: 8px;
+            color: var(--text-main);
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .back-btn:hover {
+            background: var(--border);
+            transform: translateX(-3px);
+        }
+
         .controls-group {
             display: flex;
             gap: 1.5rem;
@@ -555,6 +574,8 @@
 <body>
 
     <header>
+        <a href="/" class="back-btn" title="Zurück zur Übersicht">← Zurück</a>
+        
         <div class="header-title">🤖 ErgoBotPro</div>
         
         <div class="header-user">
@@ -687,7 +708,7 @@
                 .then(r => r.json())
                 .then(data => {
                     updateChatUI(data.messages);
-                    updateFactsUI(data.facts);
+                    updateFactsUI(data);  // Übergebe ganzes data Objekt
                     updateToggles(data.is_active, data.is_human);
                     updateLeadScore(data.lead_score);
                 })

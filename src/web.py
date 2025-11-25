@@ -96,17 +96,34 @@ def get_chat_data(user_id):
             })
         
         # Facts (strukturiert)
-        facts = get_user_facts(user_id)
+        all_facts = get_user_facts(user_id)
         
-        # Lead Score berechnen
-        lead_score = calculate_lead_score(facts)
+        # Extrahiere die einzelnen Typen
+        facts = all_facts.get('fact', {})
+        meta = all_facts.get('meta', {})
+        
+        # Lead Score aus DB holen (nicht neu berechnen!)
+        score_data = all_facts.get('score', {})
+        lead_score = int(score_data.get('lead_score', 0)) if score_data else 0
         
         # User Info
         user = get_user(user_id)
         
+        # Handle wenn User nicht existiert
+        if not user:
+            return jsonify({
+                "messages": messages,
+                "facts": facts,
+                "meta": meta,
+                "lead_score": 0,
+                "is_active": False,
+                "is_human": False
+            })
+        
         return jsonify({
             "messages": messages,
-            "facts": facts,
+            "facts": facts,       # Nur die echten Fakten
+            "meta": meta,         # Nur die Meta-Infos
             "lead_score": lead_score,
             "is_active": bool(user['is_active']),
             "is_human": bool(user['human_mode'])
@@ -124,30 +141,18 @@ def get_user_stats_api(user_id):
     try:
         stats = get_user_stats(user_id)
         facts = get_user_facts(user_id)
-        
-        # Lead Score berechnen (kann None sein wenn keine Daten)
-        try:
-            lead_score = calculate_lead_score(facts)
-        except:
-            lead_score = 0
+        lead_score = calculate_lead_score(facts)
         
         return jsonify({
-            "messages": stats.get('messages', 0),
-            "facts": stats.get('facts', 0),
-            "contacts": stats.get('contacts', 0),
+            "messages": stats['messages'],
+            "facts": stats['facts'],
+            "contacts": stats['contacts'],
             "lead_score": lead_score
         })
     
     except Exception as e:
         print(f"❌ Fehler bei get_user_stats_api: {e}")
-        import traceback
-        traceback.print_exc()
-        return jsonify({
-            "messages": 0,
-            "facts": 0,
-            "contacts": 0,
-            "lead_score": 0
-        }), 200  # ← Wichtig: 200 statt 500!
+        return jsonify({"error": str(e)}), 500
 
 @app.route('/api/user_details/<int:user_id>')
 def get_user_details(user_id):
@@ -260,16 +265,6 @@ def internal_error(error):
     return jsonify({"error": "Interner Serverfehler"}), 500
 
 # ==================== MAIN ====================
-# Bessere Error Handler
-@app.errorhandler(Exception)
-def handle_exception(e):
-    import traceback
-    print(f"❌ Unhandled Exception: {e}")
-    traceback.print_exc()
-    return jsonify({
-        "error": "Ein Fehler ist aufgetreten",
-        "message": str(e)
-    }), 500
 
 if __name__ == '__main__':
     print("\n" + "="*50)

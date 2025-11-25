@@ -12,34 +12,30 @@
         }
 
         :root {
-            --primary: #0088cc;
-            --primary-dark: #006699;
-            --secondary: #667eea;
-            --bg-main: #f8f9fa;
-            --bg-card: #ffffff;
-            --text-main: #2c3e50;
-            --text-secondary: #7f8c8d;
-            --border: #e1e8ed;
-            --success: #27ae60;
-            --shadow: 0 2px 12px rgba(0,0,0,0.08);
-            --shadow-hover: 0 4px 20px rgba(0,0,0,0.12);
+            --ergo-primary: #A3195B;
+            --ergo-dark: #8B1548;
+            --ergo-light: #FFF5E6;
+            --ergo-bg: #F8F8F8;
+            --text-dark: #2C2C2C;
+            --text-gray: #6B6B6B;
+            --white: #FFFFFF;
+            --border: #E0E0E0;
+            --shadow: 0 2px 8px rgba(163, 25, 91, 0.1);
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            color: var(--text-main);
+            font-family: 'Segoe UI', 'Roboto', -apple-system, sans-serif;
+            background: var(--ergo-bg);
+            color: var(--text-dark);
+            line-height: 1.6;
         }
 
         /* Header */
-        header {
-            background: var(--bg-card);
+        .header {
+            background: var(--white);
+            border-bottom: 2px solid var(--ergo-primary);
             padding: 1.5rem 2rem;
             box-shadow: var(--shadow);
-            position: sticky;
-            top: 0;
-            z-index: 100;
         }
 
         .header-content {
@@ -53,297 +49,393 @@
         .logo {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 1rem;
         }
 
-        .logo h1 {
-            font-size: 1.5rem;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .logo-text {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--ergo-primary);
+            letter-spacing: -1px;
         }
 
-        .stats {
-            display: flex;
-            gap: 2rem;
+        .logo-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-gray);
+            font-weight: 400;
+            margin-top: -5px;
         }
 
-        .stat-item {
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--ergo-primary) 0%, var(--ergo-dark) 100%);
+            color: var(--white);
+            padding: 4rem 2rem;
             text-align: center;
         }
 
-        .stat-value {
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: var(--primary);
+        .hero-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: -1.5px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--ergo-primary);
+            transition: transform 0.2s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 16px rgba(163, 25, 91, 0.15);
         }
 
         .stat-label {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
+            font-size: 0.9rem;
+            color: var(--text-gray);
             text-transform: uppercase;
+            font-weight: 600;
             letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
         }
 
-        /* Container */
-        .container {
-            max-width: 1400px;
-            margin: 2rem auto;
-            padding: 0 2rem;
-        }
-
-        .page-title {
-            color: white;
-            font-size: 2rem;
-            margin-bottom: 2rem;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--ergo-primary);
         }
 
         /* User Grid */
-        .user-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 1.5rem;
+        .users-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 2rem;
         }
 
-        /* User Card */
-        .user-card {
-            background: var(--bg-card);
-            border-radius: 16px;
-            padding: 1.5rem;
-            box-shadow: var(--shadow);
-            transition: all 0.3s ease;
-            text-decoration: none;
-            color: inherit;
-            border: 2px solid transparent;
-            position: relative;
-            overflow: hidden;
+        .users-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-dark);
         }
 
-        .user-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            transform: scaleX(0);
-            transition: transform 0.3s ease;
+        .users-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .user-card {
+            background: var(--white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            text-decoration: none;
+            color: inherit;
+            display: block;
         }
 
         .user-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-hover);
-            border-color: var(--primary);
+            transform: translateY(-6px);
+            box-shadow: 0 8px 24px rgba(163, 25, 91, 0.2);
+            border-color: var(--ergo-primary);
         }
 
-        .user-card:hover::before {
-            transform: scaleX(1);
+        .user-card-header {
+            background: linear-gradient(135deg, var(--ergo-primary), var(--ergo-dark));
+            padding: 2rem;
+            color: var(--white);
+            position: relative;
         }
 
-        .card-header {
+        .user-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--white);
+            color: var(--ergo-primary);
             display: flex;
             align-items: center;
-            gap: 1rem;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: 700;
             margin-bottom: 1rem;
         }
 
-        .avatar {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 1.5rem;
-            text-transform: uppercase;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-        }
-
-        .user-info {
-            flex: 1;
-        }
-
         .user-name {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
         }
 
-        .status-badge {
-            font-size: 0.7rem;
-            background: var(--success);
-            color: white;
-            padding: 2px 8px;
-            border-radius: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .status-badge.inactive {
-            background: var(--text-secondary);
-        }
-
-        .user-meta {
+        .user-username {
             font-size: 0.9rem;
-            color: var(--text-secondary);
+            opacity: 0.9;
         }
 
-        .card-stats {
+        .user-card-body {
+            padding: 1.5rem;
+        }
+
+        .user-stats {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: 1fr 1fr;
             gap: 1rem;
-            padding: 1rem 0;
-            border-top: 1px solid var(--border);
-            margin-top: 1rem;
+            margin-bottom: 1.5rem;
         }
 
-        .card-stat {
+        .user-stat {
+            text-align: center;
+            padding: 1rem;
+            background: var(--ergo-light);
+            border-radius: 8px;
+        }
+
+        .user-stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--ergo-primary);
+            display: block;
+        }
+
+        .user-stat-label {
+            font-size: 0.75rem;
+            color: var(--text-gray);
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-top: 0.3rem;
+        }
+
+        .lead-score-big {
+            background: linear-gradient(135deg, var(--ergo-primary), var(--ergo-dark));
+            color: var(--white);
+            padding: 1.5rem;
+            border-radius: 8px;
             text-align: center;
         }
 
-        .card-stat-value {
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: var(--primary);
-        }
-
-        .card-stat-label {
-            font-size: 0.7rem;
-            color: var(--text-secondary);
+        .lead-score-label {
+            font-size: 0.75rem;
             text-transform: uppercase;
-            margin-top: 0.25rem;
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
         }
 
-        .lead-score {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-            color: white;
+        .lead-score-value {
+            font-size: 3rem;
+            font-weight: 700;
+        }
+
+        .lead-score-max {
+            font-size: 1.2rem;
+            opacity: 0.8;
+        }
+
+        .user-actions {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 1.1rem;
-            box-shadow: 0 4px 12px rgba(56, 239, 125, 0.3);
+            gap: 1rem;
+            margin-top: 1.5rem;
         }
 
-        .lead-score.medium {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        .btn {
+            flex: 1;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
         }
 
-        .lead-score.low {
-            background: linear-gradient(135deg, #a8a8a8 0%, #7f7f7f 100%);
+        .btn-primary {
+            background: var(--ergo-primary);
+            color: var(--white);
         }
 
-        .arrow {
-            color: var(--primary);
-            font-size: 1.5rem;
-            transition: transform 0.3s ease;
+        .btn-primary:hover {
+            background: var(--ergo-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(163, 25, 91, 0.3);
         }
 
-        .user-card:hover .arrow {
-            transform: translateX(5px);
+        .btn-secondary {
+            background: var(--ergo-light);
+            color: var(--ergo-primary);
+            border: 2px solid var(--ergo-primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--ergo-primary);
+            color: var(--white);
         }
 
         /* Empty State */
         .empty-state {
             text-align: center;
             padding: 4rem 2rem;
-            background: white;
-            border-radius: 16px;
+            background: var(--white);
+            border-radius: 12px;
             box-shadow: var(--shadow);
         }
 
-        .empty-state-icon {
+        .empty-icon {
             font-size: 4rem;
             margin-bottom: 1rem;
         }
 
-        .empty-state-text {
-            font-size: 1.2rem;
-            color: var(--text-secondary);
+        .empty-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-text {
+            color: var(--text-gray);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--white);
+            border-top: 2px solid var(--ergo-primary);
+            padding: 2rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        .footer-text {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .stats-bar {
+                grid-template-columns: 1fr;
+            }
+
+            .users-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .user-stats {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-
-    <header>
+    <header class="header">
         <div class="header-content">
             <div class="logo">
-                <span style="font-size: 2rem;">🤖</span>
-                <h1>ErgoBotPro</h1>
-            </div>
-            <div class="stats">
-                <div class="stat-item">
-                    <div class="stat-value">{{ users|length }}</div>
-                    <div class="stat-label">Users</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="active-count">-</div>
-                    <div class="stat-label">Aktiv</div>
+                <div>
+                    <div class="logo-text">ErgoBotPro</div>
+                    <div class="logo-subtitle">Intelligente Lead-Generierung</div>
                 </div>
             </div>
         </div>
     </header>
 
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Altersvorsorge-Leads</h1>
+            <p>Professionelles Lead-Management mit KI-gestützter Konversationsanalyse</p>
+        </div>
+    </section>
+
     <div class="container">
-        <h2 class="page-title">📁 Nutzer-Akten</h2>
-        
+        <div class="stats-bar">
+            <div class="stat-card">
+                <div class="stat-label">Gesamt Leads</div>
+                <div class="stat-value">{{ users|length }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Aktive Chats</div>
+                <div class="stat-value">{{ users|selectattr('is_active')|list|length }}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Premium Leads</div>
+                <div class="stat-value">0</div>
+            </div>
+        </div>
+
+        <div class="users-header">
+            <h2 class="users-title">Alle Kontakte</h2>
+        </div>
+
         {% if users %}
-        <div class="user-grid">
+        <div class="users-grid">
             {% for user in users %}
             <a href="/chat/{{ user.id }}" class="user-card">
-                <!-- Lead Score Badge -->
-                {% set score = 0 %}
-                <div class="lead-score {% if score >= 7 %}high{% elif score >= 4 %}medium{% else %}low{% endif %}">
-                    <span id="score-{{ user.id }}">-</span>
+                <div class="user-card-header">
+                    <div class="user-avatar">{{ user.first_name[0] }}</div>
+                    <div class="user-name">{{ user.first_name }}</div>
+                    <div class="user-username">@{{ user.username or 'unbekannt' }}</div>
                 </div>
-
-                <div class="card-header">
-                    <div class="avatar">{{ user.first_name[0] }}</div>
-                    <div class="user-info">
-                        <div class="user-name">
-                            {{ user.first_name }}
-                            {% if user.is_active %}
-                            <span class="status-badge">Aktiv</span>
-                            {% else %}
-                            <span class="status-badge inactive">Inaktiv</span>
-                            {% endif %}
+                <div class="user-card-body">
+                    <div class="user-stats">
+                        <div class="user-stat">
+                            <span class="user-stat-value">{{ user.message_count or 0 }}</span>
+                            <div class="user-stat-label">Nachrichten</div>
                         </div>
-                        <div class="user-meta">@{{ user.username or 'unbekannt' }}</div>
-                        <div class="user-meta" style="font-size: 0.75rem; margin-top: 2px;">
-                            ID: {{ user.id }}
+                        <div class="user-stat">
+                            <span class="user-stat-value">{{ user.fact_count or 0 }}</span>
+                            <div class="user-stat-label">Fakten</div>
                         </div>
                     </div>
-                    <span class="arrow">→</span>
-                </div>
-
-                <div class="card-stats">
-                    <div class="card-stat">
-                        <div class="card-stat-value" id="msg-{{ user.id }}">-</div>
-                        <div class="card-stat-label">Nachrichten</div>
+                    <div class="lead-score-big">
+                        <div class="lead-score-label">Lead-Qualität</div>
+                        <div class="lead-score-value">
+                            {{ user.lead_score or 0 }}<span class="lead-score-max">/10</span>
+                        </div>
                     </div>
-                    <div class="card-stat">
-                        <div class="card-stat-value" id="facts-{{ user.id }}">-</div>
-                        <div class="card-stat-label">Fakten</div>
-                    </div>
-                    <div class="card-stat">
-                        <div class="card-stat-value" id="contacts-{{ user.id }}">-</div>
-                        <div class="card-stat-label">Kontakte</div>
+                    <div class="user-actions">
+                        <div class="btn btn-primary">Chat öffnen</div>
                     </div>
                 </div>
             </a>
@@ -351,44 +443,15 @@
         </div>
         {% else %}
         <div class="empty-state">
-            <div class="empty-state-icon">📭</div>
-            <div class="empty-state-text">Noch keine User vorhanden</div>
+            <div class="empty-icon">💬</div>
+            <h3 class="empty-title">Noch keine Leads</h3>
+            <p class="empty-text">Sobald User mit dem Bot interagieren, erscheinen sie hier.</p>
         </div>
         {% endif %}
     </div>
 
-    <script>
-        // Lade Statistiken für jeden User
-        async function loadUserStats() {
-            const users = {{ users|tojson }};
-            let activeCount = 0;
-
-            for (const user of users) {
-                try {
-                    const response = await fetch(`/api/user_stats/${user.id}`);
-                    const stats = await response.json();
-                    
-                    // Update UI
-                    document.getElementById(`msg-${user.id}`).textContent = stats.messages || 0;
-                    document.getElementById(`facts-${user.id}`).textContent = stats.facts || 0;
-                    document.getElementById(`contacts-${user.id}`).textContent = stats.contacts || 0;
-                    document.getElementById(`score-${user.id}`).textContent = stats.lead_score || 0;
-
-                    if (user.is_active) activeCount++;
-                } catch (e) {
-                    console.error(`Fehler beim Laden von User ${user.id}:`, e);
-                }
-            }
-
-            document.getElementById('active-count').textContent = activeCount;
-        }
-
-        // Beim Laden der Seite
-        loadUserStats();
-
-        // Alle 10 Sekunden aktualisieren
-        setInterval(loadUserStats, 10000);
-    </script>
-
+    <footer class="footer">
+        <p class="footer-text">ErgoBotPro © 2025 • Powered by KI-Technologie</p>
+    </footer>
 </body>
 </html>
