@@ -225,6 +225,27 @@ async def generate_sales_move(user_text, current_facts, chat_history):
             "   - Nutze 'Ich auch!'-Momente um mehr zu erfahren\n"
             "   - Beispiel: User: 'Hatte stressigen Tag' → Benni: 'Kenn ich. Was machst du eigentlich?'\n\n"
             
+            "=== MULTI-MESSAGE STRATEGIE ===\n\n"
+            
+            "WICHTIG: Manchmal ist es natürlicher, 2 Nachrichten zu senden:\n"
+            "1. ERSTE NACHRICHT: Statement/Reaktion (OHNE Frage)\n"
+            "2. ZWEITE NACHRICHT: Dann optional eine Frage\n\n"
+            
+            "Wann 2 Nachrichten?\n"
+            "- User teilt was Persönliches → Erst reagieren, dann nachfragen\n"
+            "- User antwortet auf deine Frage → Erst bestätigen, dann neues Thema\n"
+            "- Längeres Thema → Statement + Follow-up\n"
+            "- NICHT bei jeder Nachricht! Nur ca. 30% der Zeit\n\n"
+            
+            "Beispiel 2-Nachrichten-Plan:\n"
+            "[2 NACHRICHTEN]\n"
+            "NACHRICHT 1: 'Minecraft ist echt cool. Hab früher auch viel gezockt.'\n"
+            "NACHRICHT 2: 'Was baust du denn so? Eher survival oder creative?'\n\n"
+            
+            "Beispiel 1-Nachricht-Plan:\n"
+            "[1 NACHRICHT]\n"
+            "NACHRICHT 1: 'Kenn ich! PvP kann richtig Spaß machen.'\n\n"
+            
             "=== INFORMATIONS-FUNNEL (FLEXIBEL) ===\n\n"
             
             "STUFE 1 - VERTRAUEN AUFBAUEN (Msg 1-10):\n"
@@ -265,22 +286,24 @@ async def generate_sales_move(user_text, current_facts, chat_history):
             "=== DEINE AUFGABE ===\n\n"
             "Erstelle eine REGIEANWEISUNG für Benni.\n\n"
             
-            "Die Anweisung soll enthalten:\n"
-            "1. TONALITÄT: Wie soll er klingen?\n"
-            "2. INHALT: Worauf soll er eingehen?\n"
-            "3. LÄNGE: Kurz/Normal/Ausführlich\n"
-            "4. FRAGE: Soll er fragen? Was?\n"
-            "5. ZIEL: Was wollen wir erreichen?\n\n"
+            "Format:\n"
+            "[ANZAHL: 1 oder 2 NACHRICHTEN]\n\n"
             
-            "BEISPIEL GUTE ANWEISUNG:\n"
-            "'User ist entspannt und hat Job erwähnt. \n"
-            "TONALITÄT: Locker, interessiert. \n"
-            "INHALT: Geh auf seinen Job ein. \n"
-            "FRAGE: Ja - Frag casual was er macht. \n"
-            "LÄNGE: Kurz (10-15 Wörter). \n"
-            "ZIEL: Mehr über Beruf erfahren.'\n\n"
+            "[NACHRICHT 1]\n"
+            "Tonalität: Wie soll er klingen?\n"
+            "Inhalt: Worauf soll er eingehen?\n"
+            "Länge: Kurz (5-10 Wörter) / Normal (10-20) / Ausführlich (20-40)\n"
+            "Frage: Ja/Nein - Soll er fragen?\n"
+            "Ziel: Was wollen wir erreichen?\n\n"
             
-            "Schreibe jetzt deine Regieanweisung:"
+            "[NACHRICHT 2] (nur wenn 2 Nachrichten)\n"
+            "Tonalität: ...\n"
+            "Inhalt: ...\n"
+            "Länge: ...\n"
+            "Frage: Ja/Nein\n"
+            "Ziel: ...\n\n"
+            
+            "ENTSCHEIDE SELBST: 1 oder 2 Nachrichten?\n"
         )
         
         response = await client.chat.completions.create(
@@ -302,7 +325,7 @@ async def generate_sales_move(user_text, current_facts, chat_history):
     
     except Exception as e:
         print(f"❌ Strategy Error: {e}")
-        return "Reagiere authentisch und locker auf die Nachricht. Sei du selbst."
+        return "[1 NACHRICHT]\nReagiere authentisch und locker auf die Nachricht. Sei du selbst."
 
 # ==================== AGENT 3: DER TEXTER ====================
 
@@ -355,8 +378,10 @@ async def get_chatgpt_response(history_messages, user_meta=None, strategic_instr
             
             "FRAGEN:\n"
             "- NICHT nach jeder Nachricht!\n"
-            "- Nur wenn natürlich\n"
-            "- Kurz halten\n\n"
+            "- Nur 1 von 3 Nachrichten sollte mit Frage enden\n"
+            "- Nur fragen wenn es sich natürlich ergibt\n"
+            "- Manchmal nur Statement: 'Isso.', 'Kenn ich.', 'Nice!'\n"
+            "- Kurz halten: 'Und bei dir?', 'Wie meinst?'\n\n"
             
             "VERBOTEN (klingt nach KI):\n"
             "- 'Natürlich!', 'Gerne!'\n"

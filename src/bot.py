@@ -366,20 +366,54 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # ==================== PHASE 3: TEXTER ====================
     print("\n✍️  PHASE 3: Generiere Antwort...")
     
-    ai_response = await get_chatgpt_response(
+    # Prüfe ob Stratege 2 Nachrichten will
+    num_messages = 1
+    if "[2 NACHRICHTEN]" in strategic_plan or "NACHRICHT 2" in strategic_plan:
+        num_messages = 2
+        print("📤 Plane 2 Nachrichten...")
+    
+    # Erste Nachricht generieren
+    ai_response_1 = await get_chatgpt_response(
         clean_history,
         user_meta=all_known_facts.get('meta', {}),
         strategic_instruction=strategic_plan
     )
     
-    # Human Delay simulieren
-    await simulate_human_delay(user.id, context, chat_id, ai_response)
+    # Human Delay & Senden
+    await simulate_human_delay(user.id, context, chat_id, ai_response_1)
+    save_message(user.id, "assistant", ai_response_1)
+    await update.message.reply_text(ai_response_1)
     
-    # Antwort senden & speichern
-    save_message(user.id, "assistant", ai_response)
-    await update.message.reply_text(ai_response)
+    # Zweite Nachricht (falls geplant)
+    if num_messages == 2:
+        print("📤 Sende 2. Nachricht...")
+        
+        # Kurze Pause (2-5 Sekunden)
+        await asyncio.sleep(random.randint(2, 5))
+        
+        # Historie aktualisieren mit erster Nachricht
+        clean_history.append({"role": "assistant", "content": ai_response_1})
+        
+        # Zweite Nachricht mit angepasster Instruktion
+        follow_up_instruction = "Jetzt die zweite Nachricht senden. Halte dich an den Plan. Kurz und natürlich."
+        
+        ai_response_2 = await get_chatgpt_response(
+            clean_history,
+            user_meta=all_known_facts.get('meta', {}),
+            strategic_instruction=follow_up_instruction
+        )
+        
+        # Typing simulation
+        await context.bot.send_chat_action(chat_id=chat_id, action=constants.ChatAction.TYPING)
+        await asyncio.sleep(random.randint(2, 4))
+        
+        save_message(user.id, "assistant", ai_response_2)
+        await update.message.reply_text(ai_response_2)
+        
+        print(f"✅ 2 Nachrichten gesendet")
+    else:
+        print(f"✅ Antwort gesendet")
     
-    print(f"✅ Antwort gesendet")
     print("="*50 + "\n")
 
 async def error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
