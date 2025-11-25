@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Einstellungen: {{ user.first_name }}</title>
+    <title>Einstellungen: {{ user.first_name }} | ErgoBotPro</title>
     <style>
         * {
             margin: 0;
@@ -12,39 +12,290 @@
         }
 
         :root {
-            --primary: #0088cc;
-            --secondary: #667eea;
-            --bg-main: #f8f9fa;
-            --text-main: #2c3e50;
-            --text-secondary: #7f8c8d;
-            --border: #e1e8ed;
-            --shadow: 0 4px 16px rgba(0,0,0,0.1);
+            --ergo-primary: #A3195B;
+            --ergo-dark: #8B1548;
+            --ergo-light: #FFF5E6;
+            --ergo-bg: #F8F8F8;
+            --text-dark: #2C2C2C;
+            --text-gray: #6B6B6B;
+            --white: #FFFFFF;
+            --border: #E0E0E0;
+            --shadow: 0 2px 8px rgba(163, 25, 91, 0.1);
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            font-family: 'Segoe UI', 'Roboto', -apple-system, sans-serif;
+            background: var(--ergo-bg);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--ergo-primary), var(--ergo-dark));
+            color: var(--white);
             padding: 2rem;
-        }
-
-        .card {
-            background: white;
-            padding: 2.5rem;
-            border-radius: 16px;
             box-shadow: var(--shadow);
-            width: 100%;
-            max-width: 450px;
-            animation: slideUp 0.3s ease;
         }
 
-        @keyframes slideUp {
+        .header-content {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .back-btn {
+            padding: 0.6rem 1.2rem;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateX(-3px);
+        }
+
+        .header-title {
+            flex: 1;
+        }
+
+        .header-title h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+        }
+
+        .header-subtitle {
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        /* Container */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+
+        /* User Info Card */
+        .user-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--ergo-primary), var(--ergo-dark));
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .user-meta {
+            color: var(--text-gray);
+            font-size: 0.95rem;
+        }
+
+        /* Settings Card */
+        .settings-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--ergo-primary);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .card-description {
+            color: var(--text-gray);
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        /* Form */
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.8rem;
+            font-size: 1rem;
+        }
+
+        .time-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .time-input-group {
+            background: var(--ergo-light);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .time-input-group:focus-within {
+            border-color: var(--ergo-primary);
+            box-shadow: 0 0 0 3px rgba(163, 25, 91, 0.1);
+        }
+
+        .time-label {
+            font-size: 0.85rem;
+            color: var(--text-gray);
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            display: block;
+            letter-spacing: 0.5px;
+        }
+
+        .time-input {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--ergo-primary);
+            border: none;
+            background: var(--white);
+            border-radius: 8px;
+            text-align: center;
+            outline: none;
+            font-family: 'Courier New', monospace;
+        }
+
+        .time-input::-webkit-calendar-picker-indicator {
+            filter: invert(23%) sepia(73%) saturate(1738%) hue-rotate(314deg);
+            cursor: pointer;
+        }
+
+        .info-box {
+            background: var(--ergo-light);
+            border-left: 4px solid var(--ergo-primary);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1.5rem;
+        }
+
+        .info-title {
+            font-weight: 600;
+            color: var(--ergo-primary);
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .info-text {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* Buttons */
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2.5rem;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: var(--ergo-primary);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: var(--ergo-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(163, 25, 91, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--ergo-light);
+            color: var(--ergo-primary);
+            border: 2px solid var(--ergo-primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--white);
+        }
+
+        /* Success Message */
+        .success-message {
+            background: #4CAF50;
+            color: var(--white);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
             from {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(-10px);
             }
             to {
                 opacity: 1;
@@ -52,258 +303,123 @@
             }
         }
 
-        .card-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.5rem;
+            }
 
-        .card-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
+            .user-card {
+                flex-direction: column;
+                text-align: center;
+            }
 
-        h2 {
-            color: var(--text-main);
-            font-size: 1.8rem;
-            margin-bottom: 0.5rem;
-        }
+            .time-inputs {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
 
-        .card-subtitle {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--text-main);
-            font-size: 0.95rem;
-        }
-
-        .input-wrapper {
-            position: relative;
-        }
-
-        input[type="number"] {
-            width: 100%;
-            padding: 14px 16px;
-            border: 2px solid var(--border);
-            border-radius: 10px;
-            font-size: 1.1rem;
-            transition: all 0.3s;
-            outline: none;
-        }
-
-        input[type="number"]:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(0, 136, 204, 0.1);
-        }
-
-        .input-hint {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            margin-top: 6px;
-            line-height: 1.4;
-        }
-
-        .example-time {
-            display: inline-block;
-            background: var(--bg-main);
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-weight: 600;
-            color: var(--primary);
-            margin-top: 6px;
-        }
-
-        .btn {
-            display: block;
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            text-align: center;
-            text-decoration: none;
-            border-radius: 10px;
-            border: none;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 4px 12px rgba(0, 136, 204, 0.3);
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(0, 136, 204, 0.4);
-        }
-
-        .btn:active {
-            transform: translateY(0);
-        }
-
-        .btn-secondary {
-            background: var(--bg-main);
-            color: var(--text-main);
-            box-shadow: none;
-            margin-top: 12px;
-        }
-
-        .btn-secondary:hover {
-            background: var(--border);
-        }
-
-        .info-box {
-            background: linear-gradient(135deg, #e3f2fd, #f3e5f5);
-            border-left: 4px solid var(--primary);
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 1.5rem;
-        }
-
-        .info-box-title {
-            font-weight: 600;
-            color: var(--text-main);
-            margin-bottom: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .info-box-text {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            line-height: 1.5;
-        }
-
-        .time-preview {
-            background: var(--bg-main);
-            padding: 1rem;
-            border-radius: 8px;
-            margin-top: 1.5rem;
-            text-align: center;
-        }
-
-        .time-preview-label {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 0.5rem;
-        }
-
-        .time-preview-value {
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: var(--primary);
+            .button-group {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
+    <header class="header">
+        <div class="header-content">
+            <a href="/chat/{{ user.id }}" class="back-btn">← Zurück</a>
+            <div class="header-title">
+                <h1>Einstellungen</h1>
+                <div class="header-subtitle">Nachtruhe & Benachrichtigungen</div>
+            </div>
+        </div>
+    </header>
 
-    <div class="card">
-        <div class="card-header">
-            <div class="card-icon">🌙</div>
-            <h2>Nachtruhe Einstellungen</h2>
-            <p class="card-subtitle">
-                Lege fest, wann Benni nicht automatisch antworten soll.
+    <div class="container">
+        <div class="user-card">
+            <div class="user-avatar">{{ user.first_name[0] }}</div>
+            <div class="user-info">
+                <div class="user-name">{{ user.first_name }}</div>
+                <div class="user-meta">@{{ user.username or 'unbekannt' }} • ID: {{ user.id }}</div>
+            </div>
+        </div>
+
+        <div id="success-msg" class="success-message">
+            ✓ Einstellungen erfolgreich gespeichert!
+        </div>
+
+        <div class="settings-card">
+            <h2 class="card-title">🌙 Nachtruhe</h2>
+            <p class="card-description">
+                Lege fest, wann der Bot keine Nachrichten senden soll. 
+                Während der Nachtruhe werden eingehende Nachrichten zwar empfangen, 
+                aber erst nach der Nachtruhe beantwortet.
             </p>
+
+            <form method="POST" action="/save_settings/{{ user.id }}" id="settings-form">
+                <div class="form-group">
+                    <label class="form-label">Zeitraum festlegen</label>
+                    <div class="time-inputs">
+                        <div class="time-input-group">
+                            <label class="time-label">Von (Uhrzeit)</label>
+                            <input type="time" 
+                                   name="start_hour" 
+                                   class="time-input" 
+                                   value="{{ '%02d:00'|format(user.quiet_start or 22) }}" 
+                                   required>
+                        </div>
+                        <div class="time-input-group">
+                            <label class="time-label">Bis (Uhrzeit)</label>
+                            <input type="time" 
+                                   name="end_hour" 
+                                   class="time-input" 
+                                   value="{{ '%02d:00'|format(user.quiet_end or 8) }}" 
+                                   required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <div class="info-title">💡 Hinweis</div>
+                    <div class="info-text">
+                        Die Nachtruhe gilt nur wenn "Human Mode" aktiviert ist. 
+                        Im normalen Modus antwortet der Bot rund um die Uhr.
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button type="submit" class="btn btn-primary">💾 Speichern</button>
+                    <a href="/chat/{{ user.id }}" class="btn btn-secondary">Abbrechen</a>
+                </div>
+            </form>
         </div>
-
-        <div class="info-box">
-            <div class="info-box-title">
-                💡 Wie funktioniert's?
-            </div>
-            <div class="info-box-text">
-                Während der Nachtruhe empfängt Benni zwar Nachrichten, antwortet aber nicht automatisch. 
-                Das macht das Ganze realistischer und verhindert merkwürdige 3-Uhr-nachts-Antworten.
-            </div>
-        </div>
-
-        <form action="/save_settings/{{ user.id }}" method="POST">
-            <div class="form-group">
-                <label>🌙 Schlafen ab (Stunde)</label>
-                <div class="input-wrapper">
-                    <input type="number" 
-                           name="start_hour" 
-                           min="0" 
-                           max="23" 
-                           value="{{ user.quiet_start }}" 
-                           required
-                           id="start-input">
-                </div>
-                <div class="input-hint">
-                    Gib die Stunde im 24h-Format ein
-                    <span class="example-time">23 = 23:00 Uhr</span>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label>☀️ Aufwachen um (Stunde)</label>
-                <div class="input-wrapper">
-                    <input type="number" 
-                           name="end_hour" 
-                           min="0" 
-                           max="23" 
-                           value="{{ user.quiet_end }}" 
-                           required
-                           id="end-input">
-                </div>
-                <div class="input-hint">
-                    Gib die Stunde im 24h-Format ein
-                    <span class="example-time">7 = 07:00 Uhr</span>
-                </div>
-            </div>
-
-            <div class="time-preview">
-                <div class="time-preview-label">Nachtruhe-Zeitraum</div>
-                <div class="time-preview-value" id="preview">
-                    {{ user.quiet_start }}:00 - {{ user.quiet_end }}:00 Uhr
-                </div>
-            </div>
-
-            <button type="submit" class="btn">
-                💾 Einstellungen speichern
-            </button>
-            
-            <a href="/chat/{{ user.id }}" class="btn btn-secondary">
-                ← Zurück zum Chat
-            </a>
-        </form>
     </div>
 
     <script>
-        // Live Preview
-        const startInput = document.getElementById('start-input');
-        const endInput = document.getElementById('end-input');
-        const preview = document.getElementById('preview');
-
-        function updatePreview() {
-            const start = startInput.value.padStart(2, '0');
-            const end = endInput.value.padStart(2, '0');
-            preview.textContent = `${start}:00 - ${end}:00 Uhr`;
-        }
-
-        startInput.addEventListener('input', updatePreview);
-        endInput.addEventListener('input', updatePreview);
-
-        // Form validation
-        document.querySelector('form').addEventListener('submit', function(e) {
-            const start = parseInt(startInput.value);
-            const end = parseInt(endInput.value);
-
-            if (start < 0 || start > 23 || end < 0 || end > 23) {
-                e.preventDefault();
-                alert('Bitte gib eine gültige Stunde zwischen 0 und 23 ein!');
-            }
+        document.getElementById('settings-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            
+            fetch(this.action, {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (response.ok) {
+                    const msg = document.getElementById('success-msg');
+                    msg.classList.add('show');
+                    setTimeout(() => {
+                        msg.classList.remove('show');
+                    }, 3000);
+                }
+            })
+            .catch(error => {
+                console.error('Fehler:', error);
+                alert('Fehler beim Speichern der Einstellungen');
+            });
         });
     </script>
-
 </body>
 </html>

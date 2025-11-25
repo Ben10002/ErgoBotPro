@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Akte: {{ user.first_name }}</title>
+    <title>Chat: {{ user.first_name }} | ErgoBotPro</title>
     <style>
         * {
             margin: 0;
@@ -12,151 +12,118 @@
         }
 
         :root {
-            --primary: #0088cc;
-            --secondary: #667eea;
-            --bg-main: #e5ddd5;
-            --header-bg: #ffffff;
-            --sidebar-bg: #ffffff;
-            --info-bg: #f7f9fa;
-            --msg-user: #ffffff;
-            --msg-assistant: #dcf8c6;
-            --success: #27ae60;
-            --warning: #f39c12;
-            --danger: #e74c3c;
-            --text-main: #2c3e50;
-            --text-secondary: #7f8c8d;
-            --border: #e1e8ed;
-            --shadow: 0 2px 8px rgba(0,0,0,0.08);
+            --ergo-primary: #A3195B;
+            --ergo-dark: #8B1548;
+            --ergo-light: #FFF5E6;
+            --ergo-bg: #F8F8F8;
+            --text-dark: #2C2C2C;
+            --text-gray: #6B6B6B;
+            --white: #FFFFFF;
+            --border: #E0E0E0;
+            --shadow: 0 2px 8px rgba(163, 25, 91, 0.1);
+            --chat-bg: #E5DDD5;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            margin: 0;
+            font-family: 'Segoe UI', 'Roboto', -apple-system, sans-serif;
+            background: var(--ergo-bg);
+            color: var(--text-dark);
             height: 100vh;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
-            background: var(--bg-main);
         }
 
         /* Header */
-        header {
-            background: var(--header-bg);
-            padding: 0 1.5rem;
+        .header {
+            background: linear-gradient(135deg, var(--ergo-primary), var(--ergo-dark));
+            color: var(--white);
+            padding: 1rem 2rem;
+            box-shadow: var(--shadow);
             display: flex;
             align-items: center;
-            gap: 1.5rem;
-            border-bottom: 1px solid var(--border);
-            box-shadow: var(--shadow);
-            z-index: 10;
-            height: 70px;
+            gap: 2rem;
             flex-shrink: 0;
         }
 
-        .header-title {
-            font-weight: bold;
-            font-size: 1.3rem;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .header-user {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .header-avatar {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-        }
-
-        .header-info {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .header-name {
-            font-weight: 600;
-            font-size: 1rem;
-        }
-
-        .header-meta {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
-        }
-
-        .settings-btn {
-            text-decoration: none;
-            font-size: 1.3rem;
-            color: var(--text-secondary);
-            padding: 8px;
-            border-radius: 50%;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .settings-btn:hover {
-            transform: rotate(90deg);
-            background: var(--info-bg);
-            color: var(--primary);
-        }
-
         .back-btn {
-            text-decoration: none;
-            padding: 8px 16px;
-            background: var(--info-bg);
+            padding: 0.6rem 1.2rem;
+            background: rgba(255, 255, 255, 0.15);
             border-radius: 8px;
-            color: var(--text-main);
-            font-size: 0.9rem;
+            color: var(--white);
+            text-decoration: none;
             font-weight: 600;
+            font-size: 0.9rem;
             transition: all 0.2s;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 0.5rem;
         }
 
         .back-btn:hover {
-            background: var(--border);
+            background: rgba(255, 255, 255, 0.25);
             transform: translateX(-3px);
         }
 
-        .controls-group {
+        .header-user-info {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--white);
+            color: var(--ergo-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .header-details {
+            flex: 1;
+        }
+
+        .header-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.2rem;
+        }
+
+        .header-meta {
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        .header-controls {
             display: flex;
             gap: 1.5rem;
             align-items: center;
-            margin-left: auto;
         }
 
-        .toggle-container {
+        .toggle-box {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 0.7rem;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.6rem 1rem;
+            border-radius: 8px;
         }
 
-        .switch-label {
-            font-size: 0.8rem;
+        .toggle-label {
+            font-size: 0.85rem;
             font-weight: 600;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
         .switch {
             position: relative;
-            display: inline-block;
             width: 48px;
-            height: 26px;
+            height: 24px;
         }
 
         .switch input {
@@ -172,383 +139,235 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: #ccc;
+            background: rgba(255, 255, 255, 0.3);
             transition: 0.3s;
-            border-radius: 34px;
+            border-radius: 24px;
         }
 
         .slider:before {
             position: absolute;
             content: "";
-            height: 20px;
-            width: 20px;
+            height: 18px;
+            width: 18px;
             left: 3px;
             bottom: 3px;
-            background-color: white;
+            background: var(--white);
             transition: 0.3s;
             border-radius: 50%;
         }
 
-        input:checked + .slider.green {
-            background-color: var(--success);
-        }
-
-        input:checked + .slider.blue {
-            background-color: var(--primary);
+        input:checked + .slider {
+            background: var(--white);
         }
 
         input:checked + .slider:before {
-            transform: translateX(22px);
+            transform: translateX(24px);
+            background: var(--ergo-primary);
         }
 
         /* Main Layout */
-        .main-wrapper {
+        .main-container {
             display: flex;
             flex: 1;
-            height: calc(100vh - 70px);
             overflow: hidden;
         }
 
-        /* Chat List Sidebar */
-        .chat-list-sidebar {
-            width: 320px;
-            background: var(--sidebar-bg);
-            border-right: 1px solid var(--border);
+        /* Chat Area */
+        .chat-area {
+            flex: 1;
             display: flex;
             flex-direction: column;
+            background: var(--chat-bg);
+        }
+
+        .chat-messages {
+            flex: 1;
             overflow-y: auto;
-            flex-shrink: 0;
-        }
-
-        .sidebar-header {
-            padding: 15px;
-            font-weight: 600;
-            color: var(--text-secondary);
-            border-bottom: 1px solid var(--border);
-            background: var(--info-bg);
-        }
-
-        .chat-item {
-            display: flex;
-            align-items: center;
-            padding: 12px 15px;
-            cursor: pointer;
-            border-bottom: 1px solid var(--border);
-            text-decoration: none;
-            color: inherit;
-            transition: background 0.2s;
-        }
-
-        .chat-item:hover {
-            background: var(--info-bg);
-        }
-
-        .chat-item.active {
-            background: linear-gradient(90deg, rgba(0, 136, 204, 0.1), transparent);
-            border-left: 3px solid var(--primary);
-        }
-
-        .chat-avatar {
-            width: 45px;
-            height: 45px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 1.1rem;
-            margin-right: 12px;
-            flex-shrink: 0;
-        }
-
-        .chat-info {
-            flex-grow: 1;
-            overflow: hidden;
-        }
-
-        .chat-name {
-            font-weight: 600;
-            font-size: 0.95rem;
-            margin-bottom: 3px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .last-msg {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        /* Chat Section */
-        .chat-section {
-            flex: 1;
+            padding: 2rem;
             display: flex;
             flex-direction: column;
-            position: relative;
-            background: var(--bg-main);
-            background-image: linear-gradient(rgba(229, 221, 213, 0.9), rgba(229, 221, 213, 0.9)),
-                              url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iYSIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIj48cGF0aCBmaWxsPSJub25lIiBzdHJva2U9IiNkZGQiIHN0cm9rZS13aWR0aD0iMC41IiBkPSJNMCAyMGgyME0yMCAwdjIwIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2EpIi8+PC9zdmc+');
+            gap: 1rem;
         }
 
-        .chat-container {
-            flex: 1;
-            padding: 1.5rem;
-            padding-bottom: 100px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            max-width: 900px;
-            width: 100%;
-            margin: 0 auto;
-        }
-
-        /* Messages */
-        .msg {
+        .message {
             max-width: 70%;
-            padding: 10px 14px;
+            padding: 0.8rem 1.2rem;
             border-radius: 12px;
-            position: relative;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
             font-size: 0.95rem;
             line-height: 1.5;
             word-wrap: break-word;
-            animation: fadeIn 0.3s ease;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .msg-user {
-            align-self: flex-start;
-            background: var(--msg-user);
-            border-top-left-radius: 2px;
-        }
-
-        .msg-assistant {
+        .message.user {
             align-self: flex-end;
-            background: var(--msg-assistant);
-            border-top-right-radius: 2px;
+            background: var(--white);
+            color: var(--text-dark);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
         }
 
-        .meta {
+        .message.assistant {
+            align-self: flex-start;
+            background: var(--ergo-primary);
+            color: var(--white);
+        }
+
+        .message-time {
             font-size: 0.7rem;
-            color: var(--text-secondary);
-            text-align: right;
-            margin-top: 4px;
+            opacity: 0.7;
+            margin-top: 0.3rem;
+            display: block;
         }
 
-        /* Input Area */
-        .input-area {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: #f0f2f5;
-            padding: 15px;
-            display: flex;
-            justify-content: center;
-            border-top: 1px solid var(--border);
-            box-shadow: 0 -2px 8px rgba(0,0,0,0.05);
+        /* Message Input */
+        .message-input-area {
+            padding: 1.5rem;
+            background: var(--white);
+            border-top: 2px solid var(--border);
         }
 
         .input-form {
             display: flex;
-            width: 100%;
-            max-width: 900px;
-            gap: 10px;
+            gap: 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
-        .magic-btn {
-            background: linear-gradient(135deg, #8e44ad, #9b59b6);
-            color: white;
-            border: none;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-            box-shadow: 0 4px 12px rgba(142, 68, 173, 0.3);
-        }
-
-        .magic-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 16px rgba(142, 68, 173, 0.4);
-        }
-
-        .magic-btn:active {
-            transform: scale(0.95);
-        }
-
-        .msg-input {
-            flex-grow: 1;
-            padding: 14px 20px;
-            border-radius: 25px;
-            border: 1px solid var(--border);
-            outline: none;
+        .message-input {
+            flex: 1;
+            padding: 1rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-family: inherit;
             font-size: 0.95rem;
-            transition: all 0.3s;
+            outline: none;
+            transition: border-color 0.2s;
         }
 
-        .msg-input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(0, 136, 204, 0.1);
+        .message-input:focus {
+            border-color: var(--ergo-primary);
         }
 
         .send-btn {
-            background: var(--primary);
-            color: white;
+            padding: 1rem 2rem;
+            background: var(--ergo-primary);
+            color: var(--white);
             border: none;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
             cursor: pointer;
-            font-size: 1.3rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
+            transition: all 0.2s;
         }
 
         .send-btn:hover {
-            background: var(--primary);
-            transform: scale(1.05);
+            background: var(--ergo-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(163, 25, 91, 0.3);
         }
 
-        /* Info Sidebar */
-        .info-sidebar {
-            width: 350px;
-            background: var(--info-bg);
-            border-left: 1px solid var(--border);
-            padding: 1.5rem;
+        /* Sidebar */
+        .sidebar {
+            width: 380px;
+            background: var(--white);
+            border-left: 2px solid var(--border);
+            display: flex;
+            flex-direction: column;
             overflow-y: auto;
-            flex-shrink: 0;
         }
 
         .sidebar-section {
-            margin-bottom: 2rem;
+            padding: 1.5rem;
+            border-bottom: 2px solid var(--ergo-light);
         }
 
         .section-title {
-            font-size: 0.8rem;
-            font-weight: bold;
-            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 700;
             text-transform: uppercase;
-            margin-bottom: 12px;
-            letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            color: var(--text-gray);
+            margin-bottom: 1rem;
+            letter-spacing: 0.5px;
         }
 
         /* Lead Score Card */
         .lead-score-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
+            background: linear-gradient(135deg, var(--ergo-primary), var(--ergo-dark));
+            color: var(--white);
+            padding: 2rem;
             border-radius: 12px;
             text-align: center;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
         }
 
         .lead-score-label {
-            font-size: 0.8rem;
-            opacity: 0.9;
+            font-size: 0.75rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
         }
 
         .lead-score-value {
-            font-size: 3rem;
-            font-weight: bold;
-            margin: 10px 0;
+            font-size: 3.5rem;
+            font-weight: 700;
+            line-height: 1;
         }
 
-        .lead-score-sublabel {
-            font-size: 0.75rem;
+        .lead-score-max {
+            font-size: 1.5rem;
             opacity: 0.8;
         }
 
-        /* Fact Cards */
-        .fact-card {
-            background: white;
-            padding: 12px;
-            margin-bottom: 10px;
+        /* Facts */
+        .fact-item {
+            background: var(--ergo-light);
+            padding: 1rem;
             border-radius: 8px;
-            border-left: 3px solid var(--primary);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            transition: all 0.2s;
-        }
-
-        .fact-card:hover {
-            transform: translateX(3px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-
-        .fact-card.meta-card {
-            border-left-color: var(--secondary);
-            background: #f8f9ff;
+            margin-bottom: 0.8rem;
+            border-left: 3px solid var(--ergo-primary);
         }
 
         .fact-key {
             font-size: 0.7rem;
-            color: var(--text-secondary);
+            color: var(--text-gray);
             text-transform: uppercase;
-            font-weight: bold;
-            margin-bottom: 4px;
+            font-weight: 700;
+            margin-bottom: 0.3rem;
+            letter-spacing: 0.5px;
         }
 
         .fact-value {
             font-size: 0.95rem;
-            color: var(--text-main);
-            word-wrap: break-word;
+            color: var(--text-dark);
+            font-weight: 500;
         }
 
         .empty-state {
             text-align: center;
             padding: 2rem 1rem;
-            color: var(--text-secondary);
+            color: var(--text-gray);
             font-style: italic;
+            font-size: 0.9rem;
         }
 
         .toggle-meta-btn {
-            background: white;
-            border: 2px dashed var(--border);
-            color: var(--text-secondary);
+            background: var(--ergo-light);
+            border: 2px solid var(--ergo-primary);
+            color: var(--ergo-primary);
             width: 100%;
-            padding: 12px;
+            padding: 1rem;
             border-radius: 8px;
             cursor: pointer;
             font-size: 0.85rem;
-            margin-top: 15px;
-            transition: all 0.2s;
             font-weight: 600;
+            transition: all 0.2s;
         }
 
         .toggle-meta-btn:hover {
-            background: var(--info-bg);
-            border-color: var(--primary);
-            color: var(--primary);
+            background: var(--ergo-primary);
+            color: var(--white);
         }
 
         #meta-section {
             display: none;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 2px solid var(--border);
         }
 
         /* Scrollbar */
@@ -558,100 +377,101 @@
         }
 
         ::-webkit-scrollbar-track {
-            background: var(--info-bg);
+            background: var(--ergo-light);
         }
 
         ::-webkit-scrollbar-thumb {
-            background: var(--border);
+            background: var(--ergo-primary);
             border-radius: 4px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: var(--text-secondary);
+            background: var(--ergo-dark);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 320px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-controls {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .toggle-box {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .message {
+                max-width: 85%;
+            }
         }
     </style>
 </head>
 <body>
-
-    <header>
-        <a href="/" class="back-btn" title="Zurück zur Übersicht">← Zurück</a>
+    <header class="header">
+        <a href="/" class="back-btn">← Zurück</a>
         
-        <div class="header-title">🤖 ErgoBotPro</div>
-        
-        <div class="header-user">
+        <div class="header-user-info">
             <div class="header-avatar">{{ user.first_name[0] }}</div>
-            <div class="header-info">
+            <div class="header-details">
                 <div class="header-name">{{ user.first_name }}</div>
                 <div class="header-meta">@{{ user.username or 'unbekannt' }} • ID: {{ user.id }}</div>
             </div>
         </div>
 
-        <a href="/settings/{{ user.id }}" class="settings-btn" title="Einstellungen">⚙️</a>
-
-        <div class="controls-group">
-            <div class="toggle-container">
-                <span class="switch-label">🤖 KI Aktiv</span>
+        <div class="header-controls">
+            <div class="toggle-box">
+                <span class="toggle-label">🤖 KI Aktiv</span>
                 <label class="switch">
                     <input type="checkbox" id="ai-toggle" onchange="toggleAI({{ user.id }})" {{ 'checked' if user.is_active }}>
-                    <span class="slider green"></span>
+                    <span class="slider"></span>
                 </label>
             </div>
             
-            <div class="toggle-container">
-                <span class="switch-label">👤 Human Mode</span>
+            <div class="toggle-box">
+                <span class="toggle-label">👤 Human Mode</span>
                 <label class="switch">
                     <input type="checkbox" id="human-toggle" onchange="toggleHuman({{ user.id }})" {{ 'checked' if user.human_mode }}>
-                    <span class="slider blue"></span>
+                    <span class="slider"></span>
                 </label>
             </div>
         </div>
     </header>
 
-    <div class="main-wrapper">
-        <!-- Chat List Sidebar -->
-        <div class="chat-list-sidebar">
-            <div class="sidebar-header">📁 Alle Akten</div>
-            {% for u in users %}
-            <a href="/chat/{{ u.id }}" class="chat-item {{ 'active' if u.id == user.id else '' }}">
-                <div class="chat-avatar">{{ u.first_name[0] }}</div>
-                <div class="chat-info">
-                    <div class="chat-name">{{ u.first_name }}</div>
-                    <div class="last-msg">@{{ u.username or 'unbekannt' }}</div>
-                </div>
-            </a>
-            {% endfor %}
-        </div>
-
-        <!-- Chat Section -->
-        <div class="chat-section">
-            <div class="chat-container" id="chat-box">
-                {% for msg in messages %}
-                <div class="msg msg-{{ msg.role }}">
-                    {{ msg.content }}
-                    <div class="meta">{{ msg.timestamp.split('.')[0] }}</div>
-                </div>
-                {% endfor %}
+    <div class="main-container">
+        <div class="chat-area">
+            <div class="chat-messages" id="chat-box">
+                <!-- Messages loaded via JS -->
             </div>
 
-            <div class="input-area">
+            <div class="message-input-area">
                 <form class="input-form" id="send-form">
-                    <button type="button" class="magic-btn" onclick="triggerAI({{ user.id }})" title="KI-Nachricht auslösen">✨</button>
-                    <input type="text" class="msg-input" id="msg-input" placeholder="Nachricht an {{ user.first_name }}..." required autocomplete="off">
-                    <button type="submit" class="send-btn">➤</button>
+                    <input type="text" id="msg-input" class="message-input" placeholder="Nachricht schreiben..." autocomplete="off">
+                    <button type="submit" class="send-btn">Senden</button>
                 </form>
             </div>
         </div>
 
-        <!-- Info Sidebar -->
-        <div class="info-sidebar">
-            <!-- Lead Score -->
-            <div class="lead-score-card" id="lead-score-card">
-                <div class="lead-score-label">Lead Qualität</div>
-                <div class="lead-score-value" id="lead-score">-</div>
-                <div class="lead-score-sublabel">von 10 Punkten</div>
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="lead-score-card" id="lead-score-card">
+                    <div class="lead-score-label">Lead Qualität</div>
+                    <div class="lead-score-value">
+                        <span id="lead-score">0</span><span class="lead-score-max">/10</span>
+                    </div>
+                </div>
             </div>
 
-            <!-- Fakten -->
             <div class="sidebar-section">
                 <div class="section-title">📊 Harte Fakten</div>
                 <div id="facts-list">
@@ -659,19 +479,19 @@
                 </div>
             </div>
 
-            <!-- Meta Toggle Button -->
-            <button class="toggle-meta-btn" onclick="toggleMeta()">
-                🧠 Psychologisches Profil anzeigen
-            </button>
+            <div class="sidebar-section">
+                <button class="toggle-meta-btn" onclick="toggleMeta()">
+                    🧠 Psychologisches Profil anzeigen
+                </button>
+            </div>
 
-            <!-- Meta Section (Hidden by default) -->
-            <div id="meta-section">
+            <div id="meta-section" class="sidebar-section" style="display: none;">
                 <div class="section-title">🧠 Psychologisches Profil</div>
                 <div id="meta-list">
                     <div class="empty-state">Keine Daten</div>
                 </div>
             </div>
-        </div>
+        </aside>
     </div>
 
     <script>
@@ -679,16 +499,13 @@
         const chatBox = document.getElementById('chat-box');
         let isUserScrolling = false;
 
-        // Scroll Detection
         chatBox.addEventListener('scroll', () => {
             const isAtBottom = chatBox.scrollTop + chatBox.clientHeight >= chatBox.scrollHeight - 50;
             isUserScrolling = !isAtBottom;
         });
 
-        // Initial scroll
         chatBox.scrollTop = chatBox.scrollHeight;
 
-        // Toggle Meta Section
         function toggleMeta() {
             const sec = document.getElementById('meta-section');
             const btn = document.querySelector('.toggle-meta-btn');
@@ -702,31 +519,31 @@
             }
         }
 
-        // Fetch Updates
         function fetchUpdates() {
             fetch('/api/chat_data/' + userId)
                 .then(r => r.json())
                 .then(data => {
                     updateChatUI(data.messages);
-                    updateFactsUI(data);  // Übergebe ganzes data Objekt
+                    updateFactsUI(data);
                     updateToggles(data.is_active, data.is_human);
                     updateLeadScore(data.lead_score);
                 })
                 .catch(e => console.error('Fehler beim Laden:', e));
         }
 
-        // Update Chat
         function updateChatUI(messages) {
             let html = '';
             messages.forEach(msg => {
-                html += `<div class="msg msg-${msg.role}">
-                    ${msg.content}
-                    <div class="meta">${msg.timestamp}</div>
-                </div>`;
+                const msgClass = msg.role === 'user' ? 'user' : 'assistant';
+                html += `
+                    <div class="message ${msgClass}">
+                        ${msg.content}
+                        <span class="message-time">${msg.timestamp}</span>
+                    </div>
+                `;
             });
             
-            const oldHTML = chatBox.innerHTML;
-            if (oldHTML.trim() !== html.trim()) {
+            if (chatBox.innerHTML.trim() !== html.trim()) {
                 chatBox.innerHTML = html;
                 if (!isUserScrolling) {
                     chatBox.scrollTop = chatBox.scrollHeight;
@@ -734,24 +551,20 @@
             }
         }
 
-        // Update Facts
         function updateFactsUI(data) {
             const factsBox = document.getElementById('facts-list');
             const metaBox = document.getElementById('meta-list');
             
-            function generateHTML(obj, isMeta) {
+            function generateHTML(obj) {
                 if (!obj || Object.keys(obj).length === 0) {
                     return '<div class="empty-state">Keine Daten vorhanden</div>';
                 }
                 
                 let html = '';
                 for (const [key, value] of Object.entries(obj)) {
-                    // Skip lead_score in facts
                     if (key === 'lead_score') continue;
-                    
-                    const cardClass = isMeta ? 'fact-card meta-card' : 'fact-card';
                     html += `
-                        <div class="${cardClass}">
+                        <div class="fact-item">
                             <div class="fact-key">${key}</div>
                             <div class="fact-value">${value}</div>
                         </div>
@@ -760,44 +573,24 @@
                 return html || '<div class="empty-state">Keine Daten</div>';
             }
             
-            const factsHTML = generateHTML(data.facts, false);
-            const metaHTML = generateHTML(data.meta, true);
-            
-            if (factsBox.innerHTML.trim() !== factsHTML.trim()) {
-                factsBox.innerHTML = factsHTML;
-            }
-            
-            if (metaBox.innerHTML.trim() !== metaHTML.trim()) {
-                metaBox.innerHTML = metaHTML;
-            }
+            factsBox.innerHTML = generateHTML(data.facts);
+            metaBox.innerHTML = generateHTML(data.meta);
         }
 
-        // Update Lead Score
         function updateLeadScore(score) {
             const scoreElem = document.getElementById('lead-score');
             const cardElem = document.getElementById('lead-score-card');
             
             if (score !== undefined && score !== null) {
                 scoreElem.textContent = score;
-                
-                // Color coding
-                if (score >= 7) {
-                    cardElem.style.background = 'linear-gradient(135deg, #11998e 0%, #38ef7d 100%)';
-                } else if (score >= 4) {
-                    cardElem.style.background = 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)';
-                } else {
-                    cardElem.style.background = 'linear-gradient(135deg, #a8a8a8 0%, #7f7f7f 100%)';
-                }
             }
         }
 
-        // Update Toggles
         function updateToggles(isActive, isHuman) {
             document.getElementById('ai-toggle').checked = isActive;
             document.getElementById('human-toggle').checked = isHuman;
         }
 
-        // Send Message
         document.getElementById('send-form').addEventListener('submit', function(e) {
             e.preventDefault();
             
@@ -813,59 +606,24 @@
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'},
                 body: 'message=' + encodeURIComponent(text)
             })
-            .then(r => r.json())
-            .then(d => {
-                console.log('Nachricht gesendet');
-                fetchUpdates();
-            })
+            .then(() => fetchUpdates())
             .catch(e => console.error('Fehler:', e));
         });
 
-        // Toggle Functions
-        function toggleAI(uId) {
-            fetch('/toggle/' + uId, { method: 'POST' })
-                .then(r => r.json())
-                .then(d => {
-                    console.log('KI-Status geändert');
-                    fetchUpdates();
-                });
+        function toggleAI(userId) {
+            fetch('/toggle/' + userId, {method: 'POST'})
+                .then(() => fetchUpdates())
+                .catch(e => console.error('Fehler:', e));
         }
 
-        function toggleHuman(uId) {
-            fetch('/toggle_human/' + uId, { method: 'POST' })
-                .then(r => r.json())
-                .then(d => {
-                    console.log('Human Mode geändert');
-                    fetchUpdates();
-                });
+        function toggleHuman(userId) {
+            fetch('/toggle_human/' + userId, {method: 'POST'})
+                .then(() => fetchUpdates())
+                .catch(e => console.error('Fehler:', e));
         }
 
-        function triggerAI(uId) {
-            const btn = document.querySelector('.magic-btn');
-            const originalText = btn.textContent;
-            btn.textContent = '⏳';
-            btn.disabled = true;
-            
-            fetch('/trigger_ai/' + uId, { method: 'POST' })
-                .then(r => r.json())
-                .then(d => {
-                    btn.textContent = originalText;
-                    btn.disabled = false;
-                    fetchUpdates();
-                })
-                .catch(e => {
-                    console.error('Fehler:', e);
-                    btn.textContent = originalText;
-                    btn.disabled = false;
-                });
-        }
-
-        // Auto-refresh every 2 seconds
-        setInterval(fetchUpdates, 2000);
-        
-        // Initial load
         fetchUpdates();
+        setInterval(fetchUpdates, 2000);
     </script>
-
 </body>
 </html>
